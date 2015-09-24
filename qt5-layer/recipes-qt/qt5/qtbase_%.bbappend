@@ -1,9 +1,5 @@
 # Copyright (C) 2013 Eric Bénard - Eukréa Electromatique
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-
-SRC_URI += "file://Force_egl_visual_ID_33.patch"
-
 HAS_X11 = "${@base_contains('DISTRO_FEATURES', 'x11', 1, 0, d)}"
 
 IS_MX6SL = "0"
@@ -48,7 +44,7 @@ do_configure_prepend_mx6() {
         if test ${IS_MX6SL} -eq 0; then
     
             cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
-EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks_imx6.cpp
+EGLFS_DEVICE_INTEGRATION = eglfs_viv
 IMX6_CFLAGS             = -DLINUX=1 -DEGL_API_FB=1
 EOF
         else
@@ -56,8 +52,6 @@ EOF
 IMX6_CFLAGS             = -DLINUX=1
 EOF
         fi
-        # copy the hook in the mkspecs directory OE is using
-        cp ${S}/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp ${S}/mkspecs/linux-oe-g++/
     else
         cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 IMX6_CFLAGS             = -DLINUX=1
